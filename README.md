@@ -26,8 +26,20 @@ ngrok http 5005
 example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram/webhook"
 3. keep ngrok running and run the rasa model
 
-### Folder structure:
+### Main folder structure:
 ```
+.
+|
+├── papreadr_ui             # web application with pdf viewer and chat widget
+├── rasa_chatbot            # rasa chatbot
+├── requirements.txt        # exported pip package list
+├── environment.yml         # exported conda env package list 
+└── README.md
+```
+
+### Rasa chatbot folder structure:
+```
+.
 |
 ├── actions                 # custom actions
 │   ├── add_doc.py          
@@ -51,6 +63,23 @@ example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram
 ├── credentials.yml         # set credentials for platform access: Telegram 
 ├── domain.yml              # declare intents, actions, utterances
 └── endpoints.yml
+```
+
+### Web application folder structure:
+```
+.
+|
+├── static                 # js, assets and templates
+│   ├── css                     
+│   ├── img  
+│   └── js 
+│       ├── components 
+│       ├── lib 
+│       ├── constants.js 
+│       └── script.js 
+├── index.html              # web application
+├── LICENSE                 
+└── README.md               
 ```
 
 ### Current main skills:
