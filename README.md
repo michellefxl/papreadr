@@ -1,5 +1,13 @@
 # Papr Readr Bot
 
+### Setup
+1. Install packages in conda env (environment.yml, requirements.txt)
+2. Download huggingface models and place in the folder in rasa_chatbot:
+- [Summarization model](https://huggingface.co/facebook/bart-large-cnn) 
+- [QnA model](https://huggingface.co/deepset/tinyroberta-squad2)
+- Click "Use in Transformers" and download:
+<img src="https://user-images.githubusercontent.com/100949943/166263798-771e3d7d-bc93-4bf9-86ee-09e249668bb8.png" width="auto" height="400" />
+
 ### Versions:
 22.April 2022 - V1 [Demo paper submitted to CUI 2022](https://github.com/michellefxl/paprreadrbot/files/8554340/Papr_Readr_Bot__CUI_2022_Demo_Track_.pdf)
 
@@ -25,6 +33,9 @@ ngrok http 5005
 2. replace webhook_url in rasa's credentials.yml with the last forwarding url that ends with '.io' and add '/webhooks/telegram/webhook'
 example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram/webhook"
 3. keep ngrok running and run the rasa model
+
+### Run web application:
+1. after starting the rasa action and model, click on index.html in the ui folder to open the web application
 
 ### Main folder structure:
 ```
