@@ -1,0 +1,131 @@
+version: "3.0"
+
+stories:
+
+- story: happy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: action_help
+#   - intent: summarize_doc
+#   - action: utter_geturl
+#   - intent: pdfurl
+#   - action: action_summarize
+- story: affirm path
+  steps:
+  - intent: affirm
+  - action: utter_affirm
+
+- story: deny path
+  steps:
+  - intent: deny
+  - action: utter_deny
+
+- story: bye path
+  steps:
+  - intent: goodbye
+  - action: utter_bye
+
+- story: get doc path
+  steps:
+  - intent: setdoc
+  - action: utter_geturl
+  - intent: pdfurl
+  - action: action_setdoc
+  # - intent: summarize_doc
+  # - action: action_summarize
+  # - intent: question
+  # - action: action_answer_question
+
+- story: explore path
+  steps:
+  # - intent: askquestion
+  # - action: utter_question
+  # - intent: question
+  # - action: action_answer_question
+  - intent: getkeywords
+  - action: action_extractkeyword
+
+- story:  summarize path
+  steps:
+  - intent: summarize_doc
+  - action: action_summarize
+  # - intent: question
+  # - action: action_answer_question
+
+- story:  get figures path
+  steps:
+  # - intent: pdfurl
+  # - action: action_setdoc
+  - intent: getfigs
+  - action: action_extractfigs
+
+# - story: full path
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - action: action_help
+#   - intent: setdoc
+#   - action: utter_geturl
+#   - intent: pdfurl
+#   - action: action_setdoc
+#   - intent: summarize_doc
+#   - action: action_summarize
+#   - intent: question
+#   - action: action_answer_question
+#   - intent: getfigs
+#   - action: action_extractfigs
+#   - intent: makenote
+#   - action: utter_getnote
+#   - intent: setnote
+#   - action: action_addnotes
+
+- story:  get help path
+  steps:
+  - intent: gethelp
+  - action: action_help
+
+- story:  get cite path
+  steps:
+  - intent: getcite
+  - action: action_bibtex
+
+- story:  get notes path
+  steps:
+  - intent: makenote
+  - action: utter_getnote
+  - intent: setnote
+  - action: action_addnotes
+
+- story:  see notes path
+  steps:
+  - intent: seenote
+  - action: action_getnotes
+
+- story: qna path
+  steps:
+  - intent: askquestion
+  - action: utter_question
+  - intent: question
+  - action: action_answer_question
+
+
+# - story: sad path 1
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: mood_unhappy
+#   - action: utter_cheer_up
+#   - action: utter_did_that_help
+#   - intent: affirm
+#   - action: utter_happy
+
+# - story: sad path 2
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: mood_unhappy
+#   - action: utter_cheer_up
+#   - action: utter_did_that_help
+#   - intent: deny
+#   - action: utter_goodbye

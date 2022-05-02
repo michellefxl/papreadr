@@ -1,0 +1,53 @@
+version: "3.0"
+
+rules:
+
+# - rule: Say goodbye anytime the user says goodbye
+#   steps:
+#   - intent: goodbye
+#   - action: utter_goodbye
+
+# - rule: Say 'I am a bot' anytime the user challenges
+#   steps:
+#   - intent: bot_challenge
+#   - action: utter_iamabot
+
+# - rule: Say goodbye anytime the user says goodbye
+#   steps:
+#   - intent: goodbye
+#   - action: utter_goodbye
+
+- rule: Say ok anytime the user says yes
+  steps:
+  - intent: affirm
+  - action: utter_affirm
+
+- rule: Say ok anytime the user says no
+  steps:
+  - intent: deny
+  - action: utter_deny
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_bye
+
+- rule: Give citation anytime the user says cite
+  steps:
+  - intent: getcite
+  - action: action_bibtex
+
+- rule: Set note anytime the user starts with Note
+  steps:
+  - intent: setnote
+  - action: action_addnotes
+
+- rule: Show note anytime the user wants to see note
+  steps:
+  - intent: seenote
+  - action: action_getnotes
+
+- rule: Get question anytime bot ask for question
+  steps:
+  - intent: question
+  - action: action_answer_question

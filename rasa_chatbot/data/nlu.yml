@@ -1,0 +1,182 @@
+version: "3.0"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: pdfurl
+  examples: |
+    - https://arxiv.org/pdf/
+    - https://
+
+- intent: summarize_doc
+  examples: |
+    - i want a summary
+    - summarize
+
+- intent: setdoc
+  examples: |
+    - i want to read this paper
+    - add a paper
+    - set paper
+
+- intent: getkeywords
+  examples: |
+    - keywords
+    - keyword
+    - give me the keywords
+
+- intent: getfigs
+  examples: |
+    - Extract figures
+    - Save figures
+    - figures
+    - pdf images
+    - Show me the figures
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: question
+  examples: |
+    - ?
+    - what is
+    - how
+    - can you tell me
+    - when
+    - where
+    - when
+    - with what
+    - why
+    - do you know
+
+- intent: gethelp
+  examples: |
+    - help
+    - can you do
+    - show skills
+    - show help
+
+- intent: getcite
+  examples: |
+    - citation
+    - cite
+    - bibtex
+    - I want to cite this
+
+- intent: makenote
+  examples: |
+    - I want to make a note
+    - make note
+    - write note
+    - keep note
+    - add note
+
+- intent: setnote
+  examples: |
+    - Note:
+    - Note: This paper is
+    - Note: ...
+    - note:
+
+- intent: seenote
+  examples: |
+    - Show notes on this paper
+    - are there notes on this paper
+    - show notes
+    - i want to see notes
+    - see notes
+
+- intent: askquestion
+  examples: |
+    - I want to ask question
+    - I have question about the paper
+    - questions
+    - qna
+    - ask
+    - question
+    
+
+
+# - intent: mood_great
+#   examples: |
+#     - perfect
+#     - great
+#     - amazing
+#     - feeling like a king
+#     - wonderful
+#     - I am feeling very good
+#     - I am great
+#     - I am amazing
+#     - I am going to save the world
+#     - super stoked
+#     - extremely good
+#     - so so perfect
+#     - so good
+#     - so perfect
+
+# - intent: mood_unhappy
+#   examples: |
+#     - my day was horrible
+#     - I am sad
+#     - I don't feel very well
+#     - I am disappointed
+#     - super sad
+#     - I'm so sad
+#     - sad
+#     - very sad
+#     - unhappy
+#     - not good
+#     - not very good
+#     - extremly sad
+#     - so saad
+#     - so sad
+
+# - intent: bot_challenge
+#   examples: |
+#     - are you a bot?
+#     - are you a human?
+#     - am I talking to a bot?
+#     - am I talking to a human?
