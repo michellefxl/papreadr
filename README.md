@@ -2,23 +2,13 @@
 
 ### Setup
 1. Install packages in conda env (environment.yml, requirements.txt)
-2. Download huggingface models and place in the folder in rasa_chatbot:
+2. cd to huggingface folder and run the following script to download the models:
 - [Summarization model](https://huggingface.co/facebook/bart-large-cnn) 
 - [QnA model](https://huggingface.co/deepset/tinyroberta-squad2)
-- Click "Use in Transformers" and download or download and save models through the codes below:
-<img src="https://user-images.githubusercontent.com/100949943/166263798-771e3d7d-bc93-4bf9-86ee-09e249668bb8.png" width="auto" height="400" />
-
 ```
-from transformers import pipeline
-
-SUM_MODEL_PATH = "../huggingface/facebook/bart-large-cnn"
-summary_model = pipeline("summarization", model="facebook/bart-large-cnn")
-summary_model.save_pretrained(SUM_MODEL_PATH)
-
-QNA_MODEL_PATH = "../huggingface/deepset/tinyroberta-squad2"
-qa_model = pipeline("question-answering", model="deepset/roberta-base-squad2")
-qa_model.save_pretrained(QNA_MODEL_PATH)
+python download_models.py
 ```
+
 
 ### Versions:
 22.April 2022 - V1 [Demo paper submitted to CUI 2022](https://github.com/michellefxl/paprreadrbot/files/8554340/Papr_Readr_Bot__CUI_2022_Demo_Track_.pdf)
@@ -59,6 +49,7 @@ example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram
 .
 |
 ├── chat_history            # logs input url and paper details (new folder will be created inside for each paper)
+├── huggingface             # folder to save downloaded huggingface models
 ├── papreadr_ui             # web application with pdf viewer and chat widget
 ├── rasa_chatbot            # rasa chatbot
 ├── requirements.txt        # exported pip package list
