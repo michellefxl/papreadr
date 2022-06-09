@@ -122,8 +122,12 @@ class SummarizeDoc(Action):
                     * 100
                 )
 
-                botResponse = f"The summary from BART is {sum_ratio}% shorter than the original document."
-                botResponse2 = f"Summary of {title}: {summary}"
+                sum_word_count = len(summary.split())
+                
+                # botResponse = f"The summary from BART is {sum_ratio}% shorter than the original document."
+                # botResponse2 = f"Summary of {title}: {summary}"
+                botResponse = f"Here's a {sum_word_count} words summary of {title} from BART!"
+                botResponse2 = f"{summary}"
             else:
                 botResponse = (
                     f"Here's the summary of {title} that I remembered from BART:"

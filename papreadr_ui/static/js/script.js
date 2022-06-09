@@ -30,6 +30,12 @@ document.addEventListener('DOMContentLoaded', function() {
   M.Dropdown.init(dropdowns);
 });
 
+// tooltip
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.tooltipped');
+  M.Tooltip.init(elems, top);
+});
+
 window.addEventListener('load', () => {
   // initialization
   $(document).ready(() => {
@@ -39,10 +45,12 @@ window.addEventListener('load', () => {
     // drop down menu for close, restart conversation & clear the chats.
     $(".dropdown-trigger").dropdown();
 
+    // tooltip
+    $('.tooltipped').tooltip();
+
     // initiate the modal for displaying the charts,
     // if you dont have charts, then you comment the below line
     $(".modal").modal();
-
 
     send("Hello");
     // enable this if u have configured the bot to start the conversation.
@@ -54,7 +62,7 @@ window.addEventListener('load', () => {
   });
   // Toggle the chatbot screen
   $("#profile_div").click(() => {
-    $(".profile_div").toggle();
+    // $(".profile_div").toggle();
     $(".widget").toggle();
   });
 

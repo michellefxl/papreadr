@@ -43,6 +43,12 @@ nlu:
   examples: |
     - https://arxiv.org/pdf/
     - https://
+    - doi:
+    - DOI:
+    - file:
+    - title:
+    - file:///home/
+    - /home/
 
 - intent: summarize_doc
   examples: |
@@ -137,6 +143,12 @@ nlu:
     - qna
     - ask
     - question
+
+- intent: scitldr
+  examples: |
+    - scitldr
+    - one sentence summary 
+    - one line summary
     
 
 

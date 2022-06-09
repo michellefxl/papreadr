@@ -6,8 +6,124 @@ import re
 import requests
 import shutil
 from difflib import SequenceMatcher
+from semanticscholar import SemanticScholar
 
 from actions.actionconstants import LOG_FOLDER, TEMPLATE_FOLDER
+
+
+def _semanticScho(paper_id):
+    """get semanticscholar public api results 
+
+    Args:
+        paper_id (string): can be doi, semantic scholar corpus id
+
+    Returns:
+        _ss (dict)
+    """
+    ss = SemanticScholar(timeout=120)
+    try:
+        _ss = ss.paper(paper_id)
+    except:
+        _ss = "null"
+    return _ss
+
+
+def _getSSresults(result):
+    """get semanticscholar public api results and put into dict
+
+    Args:
+        result (dict)
+
+    Returns:
+        SS_dict (dict)
+    """
+
+    SS_dict = {
+        "title": result["title"],
+        "pdf": "null",
+        "abstract": result["abstract"],
+        "arxiv_num": result["arxivId"],
+        "author": result["authors"],
+        "booktitle": "null",
+        "citations": "null",  # arxiv citation bibtex
+        "citation": result["citations"],  # cites from the paper
+        "paperId": result["paperId"],  # ss ID
+        "doi": result["doi"],
+        "field": result["fieldsOfStudy"],
+        "numCitedBy": result["numCitedBy"],
+        "references": result["references"],
+        "keywords": result["topics"],
+        "url": result["url"],
+        "journal": result["venue"],
+        "publisher": result["venue"],
+        "year": result["year"],
+        "bib": "null",
+        "read_time": "null",
+        "added_date": "null",
+    }
+
+    if SS_dict['arxiv_num'] != None:
+        SS_dict['pdf'] = "https://arxiv.org/pdf/" + str(SS_dict['arxiv_num']) + ".pdf"
+    return SS_dict
+
+
+def _getArxivresults(result):
+    """get arxivcheck results and put into dict
+
+    Args:
+        result (string)
+
+    Returns:
+        arxiv_dict (dict)
+    """
+
+    arxiv_dict = {
+        "title": "null",
+        "pdf": "null",
+        "abstract": "null",
+        "arxiv_num": "null",
+        "author": "null",
+        "booktitle": "null",
+        "citation": "null",  # arxiv citation bibtex
+        "citations": "null",  # cites from the paper
+        "paperId": "null",  # ss ID
+        "doi": "null",
+        "field": "null",
+        "numCitedBy": "null",
+        "references": "null",
+        "keywords": "null",
+        "url": "null",
+        "journal": "null",
+        "publisher": "null",
+        "year": "null",
+        "bib": "null",
+        "read_time": "null",
+        "added_date": "null",
+    }
+
+    cite_list = result.split(",")
+
+    for line in cite_list:
+        if "title" in line:
+            arxiv_dict["title"] = " ".join(_clean_line(line).split())
+        if "author" in line:
+            arxiv_dict["author"] = _clean_line(line)
+        if "journal" in line:
+            arxiv_dict["journal"] = _clean_line(line)
+        if "url" in line:
+            arxiv_dict["url"] = _clean_line(line)
+        if "year" in line:
+            arxiv_dict["year"] = _clean_line(line)
+        if "publisher" in line:
+            arxiv_dict["publisher"] = _clean_line(line)
+        if "doi" in line:
+            arxiv_dict["doi"] = _clean_line(line)
+        if "booktitle" in line:
+            arxiv_dict["booktitle"] = _clean_line(line)
+        if "keywords" in line:
+            arxiv_dict["keywords"] = _clean_line(line)
+
+    return arxiv_dict
 
 
 def _get_toc(txt):
@@ -68,20 +184,20 @@ def _clean_line(line):
     return cleaned_line
 
 
-def preprocess_txt(URL):
+def preprocess_txt(paper_dict):
     """preprocess document text to remove unnecessary sections and save
 
     Args:
-        URL (_type_): _description_
+        URL (string): file url or local path
 
     Returns:
-        cleaned_txt: _description_
-        sections: _description_
+        cleaned_txt: cleaned pdf txt
+        sections: table of contents
     """
     # check if URL doc is preprocessed and saved already
     # if not run preprocessing
     processed_bool = False
-    paper_folder = os.path.join(LOG_FOLDER, URL.split("/")[-1].split(".pdf")[0])
+    paper_folder = os.path.join(LOG_FOLDER, paper_dict['title'])
     paper_text = os.path.join(paper_folder, "doc_text.log")
     if os.path.exists(paper_folder):
         if Path(paper_text).is_file():
@@ -98,7 +214,7 @@ def preprocess_txt(URL):
         shutil.copytree(TEMPLATE_FOLDER, paper_folder)
 
     if not processed_bool:
-        res = requests.get(URL, stream=True)
+        res = requests.get(paper_dict['pdf'], stream=True)
         doc = fitz.open(stream=res.content, filetype="pdf")
 
         opt = "text"
@@ -153,77 +269,166 @@ def get_details(URL):
     """reads pdf metadata or citation to retrieve doc details
 
     Args:
-        URL (string): url to pdf
+        URL (string): url or file path to pdf
 
     Returns:
-        title, author, journal, url, year, publisher, doi, booktitle, keywords
+        paper_details_dict (dict): paper details in dictionary
     """
-    title = "null"
-    author = "null"
-    journal = "null"
-    url = "null"
-    year = "null"
-    publisher = "null"
-    doi = "null"
-    booktitle = "null"
-    keywords = "null"
-    citation = "null"
-    arxiv_num = "null"
 
-    res = requests.get(URL, stream=True)
-    curr_doc = fitz.open(stream=res.content, filetype="pdf")
+    paper_details_dict = {
+        "title": "null",
+        "pdf": "null",
+        "abstract": "null",
+        "arxiv_num": "null",
+        "author": "null",
+        "booktitle": "null",
+        "citation": "null",  # arxiv citation bibtex
+        "citations": "null",  # cites from the paper
+        "paperId": "null",  # ss ID
+        "doi": "null",
+        "field": "null",
+        "numCitedBy": "null",
+        "references": "null",
+        "keywords": "null",
+        "url": "null",
+        "journal": "null",
+        "publisher": "null",
+        "year": "null",
+        "bib": "null",
+        "read_time": "null",
+        "added_date": "null",
+    }
 
-    if curr_doc.metadata["title"] != "":
-        title = curr_doc.metadata["title"]
-    else:
-        print(URL)
-        if ".pdf" in URL:
-            arxiv_num = URL.split("/")[-1].split(".pdf")[0]
-        elif "arXiv." in URL:
-            arxiv_num = URL.split("/")[-1].split("arXiv.")[1:][0]
+    ar_result = None
+
+    # check if url or local path
+    if "http" in URL:
+        if "arxiv" in URL:
+            if ".pdf" in URL:
+                arxiv_num = URL.split("/")[-1].split(".pdf")[0]
+                paper_details_dict['pdf'] = URL
+            elif "arxiv." in URL:
+                arxiv_num = URL.split("/")[-1].split("arxiv.")[1:][0]
+            else:
+                arxiv_num = URL.split("/")[-1]
+
+            if "v" in arxiv_num:
+                arxiv_num = arxiv_num.split("v")[0]
+
+            # Method: use semantic scholar to get paper details
+            paperId = "arxiv:" + arxiv_num
+
+            result = _semanticScho(paperId)
+            paper_details_dict = _getSSresults(result)
+
+            # Method: use arxivcheck to get paper details
+            cmd = "arxivcheck " + arxiv_num
+            ar_result = os.popen(cmd).read()
+
+            if not result:
+                if "not found" in ar_result:
+                    print("No results")
+                else:
+                    paper_details_dict = _getArxivresults(ar_result)
+
+        elif "semanticscholar" in URL:
+            paperId = URL.split("/")[-1]
+
+            result = _semanticScho(paperId)
+            paper_details_dict = _getSSresults(result)
         else:
-            arxiv_num = URL.split("/")[-1]
-        cmd = "arxivcheck " + arxiv_num
-        result = os.popen(cmd).read()
+            print("URL no results")
 
-        cite_list = result.split(",")
-        # save reformatted details in details.log
+    elif "file:" in URL or "/home" in URL:
+        file_path = URL.split("//")[-1]
+        paper_details_dict['pdf'] = file_path
+        curr_doc = fitz.open(file_path, filetype="pdf")
+        if curr_doc.metadata["title"] != "":
+            paper_title = curr_doc.metadata["title"]
+        else:
+            first_page = curr_doc.load_page(0).get_text("blocks")
+            _lines = []
+            for l in first_page[:3]:
+                _lines.append(l[-3].replace("\n", " "))
+            for l in _lines:
+                if "," not in l:
+                    paper_title = l
+                else:
+                    break
+            for l in first_page:
+                if "arXiv" in l[-3]:
+                    ar = l[-3].split(" ")[0]
+                    arxiv_num = ar.split(":")[-1].split("v", 2)[0]
 
-        for line in cite_list:
-            if "title" in line:
-                title = _clean_line(line)
-            if "author" in line:
-                author = _clean_line(line)
-            if "journal" in line:
-                journal = _clean_line(line)
-            if "url" in line:
-                url = _clean_line(line)
-            if "year" in line:
-                year = _clean_line(line)
-            if "publisher" in line:
-                publisher = _clean_line(line)
-            if "doi" in line:
-                doi = _clean_line(line)
-            if "booktitle" in line:
-                booktitle = _clean_line(line)
-            if "keywords" in line:
-                keywords = _clean_line(line)
+                    paperId = "arxiv:" + arxiv_num
 
-        citation = result.replace("\n", "")
+                    result = _semanticScho(paperId)
+                    paper_details_dict = _getSSresults(result)
+                    break
 
-    return (
-        title,
-        author,
-        journal,
-        url,
-        year,
-        publisher,
-        doi,
-        booktitle,
-        keywords,
-        citation,
-        arxiv_num,
-    )
+        if paper_details_dict["title"] == "null":
+            cmd = "arxivcheck -t " + paper_title
+            ar_result = os.popen(cmd).read()
+            arxiv_dict = _getArxivresults(ar_result)
+
+            if " ".join(paper_title.lower().split()) == " ".join(
+                arxiv_dict["title"].lower().split()
+            ):
+                arxiv_num = arxiv_dict["url"].split("/")[-1]
+                if "v" in arxiv_num:
+                    arxiv_num = arxiv_num.split("v")[0]
+                paperId = "arxiv:" + arxiv_num
+                result = _semanticScho(paperId)
+                if result != "null":
+                    paper_details_dict = _getSSresults(result)
+                else:
+                    paper_details_dict = arxiv_dict
+            else:
+                print("Incorrect title")
+    elif "doi:" in URL.lower():
+        doi = URL.split(":")[-1]
+        result = _semanticScho(doi)
+        print(result['title'])
+        if result != "null":
+            paper_details_dict = _getSSresults(result)
+        else:
+            print("Doi not found")
+    elif "title:" in URL.lower():
+        title= " ".join(URL.split('title:')[-1].split())
+        cmd = "arxivcheck -t " + title
+        ar_result = os.popen(cmd).read()
+        arxiv_dict = _getArxivresults(ar_result)
+        print(ar_result)
+
+        if not "not found" in ar_result and URL.lower() == " ".join(
+            arxiv_dict["title"].lower().split()
+        ):
+            arxiv_num = arxiv_dict["url"].split("/")[-1]
+            if "v" in arxiv_num:
+                arxiv_num = arxiv_num.split("v")[0]
+            paperId = "arxiv:" + arxiv_num
+            result = _semanticScho(paperId)
+
+            if result != "null":
+                paper_details_dict = _getSSresults(result)
+            else:
+                print("Title search no results")
+
+        elif not "not found":
+            paper_details_dict = _getArxivresults(ar_result)
+
+    # get bibtex
+    if paper_details_dict["doi"] != None:
+        try:
+            cmd = "doi2bib " + paper_details_dict["doi"]
+            bib = os.popen(cmd).read()
+            paper_details_dict["bib"] = bib.replace("\n", "").replace("\t", "")
+        except:
+            paper_details_dict["bib"] = ar_result.replace("\n", "")
+    elif ar_result != None:
+        paper_details_dict["bib"] = ar_result.replace("\n", "")
+
+    return paper_details_dict
 
 
 def write_json(new_data, filename, jsonkey="url_history"):

@@ -2,16 +2,64 @@ body {
   font-family: "Open Sans", sans-serif;
   /* background: url("../img/body.png") no-repeat center center fixed; */
   background-size: cover;
+  /* color: #ffffff;
+  background-color: rgb(49, 49, 49); */
 }
 
+.container-fluid
+{
+  padding-left: 150px;
+  padding-right: 150px;
+
+}
+
+/* width of pdf viewer */
+.middle {
+  width: 80%;
+  }
+
+.right {
+  width: 20%;
+  padding-left: 20px;
+  padding-right: 0px;
+  }
+
+.tabs .tab a{
+  color:rgb(30,144,255);
+} /*Black color to the text*/
+
+.tabs .tab a:hover {
+  background-color:rgba(151, 194, 238, 0.507);
+  color:rgb(30,144,255);
+} /*Text color on hover*/
+
+.tabs .tab a.active {
+  background-color:rgba(151, 194, 238, 0.507);
+  color:rgb(30,144,255);
+} /*Background and text color when a tab is active*/
+
+.tabs .indicator {
+  background-color:rgb(30,144,255);
+} /*Color of underline*/
+
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+  background-color:rgba(151, 194, 238, 0);
+  color:rgb(30,144,255);
+  }
+
+.card-content{
+  color: #000000;
+  /* overflow-y: scroll; 
+  height: 325px; */
+}
 /* ============= css related to chats =============== */
 
 .widget {
   display: none;
-  width: 450px;
+  width: 400px;     /* 450px */
   right: 20px;
-  height: 700px;
-  bottom: 5%;
+  height: 600px;    /* 700px */
+  bottom: 12%;      /* 5%*/
   position: fixed;
   background: #fff;
   border-radius: 10px 10px 10px 10px;
@@ -35,7 +83,7 @@ body {
 
 .chats {
   /* display: none; */
-  height: 585px;
+  height: 485px; /* 585 */
   padding: 2px;
   border-radius: 1px;
   overflow-y: scroll;
@@ -46,6 +94,7 @@ body {
 div.chats::-webkit-scrollbar {
   overflow-y: hidden;
   width: 0px;
+  bottom: 12%;  
   /* remove scrollbar space /
     background: transparent;
     / optional: just make scrollbar invisible */
@@ -165,7 +214,7 @@ blockquote {
 .keypad {
   /* display: none;  */
   background: white;
-  height: 50px;
+  height: 60px; /*50px*/
   position: absolute;
   bottom: 0px;
   width: 100%;
@@ -198,8 +247,8 @@ blockquote {
   /* display: none; */
   position: fixed;
   padding: 5px;
-  width: 10%;
-  bottom: 0;
+  width: 8%; /* originally 10% */
+  bottom: 10; /* originally 0 */
   right: 0;
   cursor: pointer;
 }

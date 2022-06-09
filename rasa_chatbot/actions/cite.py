@@ -46,7 +46,7 @@ class GetCitation(Action):
                 doc_details = os.path.join(doc_folder, "details.log")
                 with open(doc_details, "r") as file:
                     # First we load existing data into a dict.
-                    bibtex = json.load(file)["bibtex"]
+                    bibtex = json.load(file)["bib"]
             except FileNotFoundError:
                 print("The file does not exist")
 

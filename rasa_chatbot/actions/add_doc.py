@@ -54,7 +54,7 @@ URL_LOG = Path(URL_LOG)
 
 
 class SetDoc(Action):
-    """add paper through url
+    """add paper through url/ load local pdf
         - extract paper details and save
         - extract paper text, preprocess and save
 
@@ -72,20 +72,15 @@ class SetDoc(Action):
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
 
-        # get user input url
+        # get user input url, (can be url, file path, doi or title)
         userMessage = tracker.latest_message["text"]
 
         try:
-            # check if valid url
-            # SKIPPED this because of bottleneck
-            # response = requests.get(userMessage)
-
-            # user input pdf link
-            doc_url = userMessage
-
+            
+            pdf_link = userMessage
             added_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
-            # check if url exists
+            # check if url exists in log
             data = []
             try:
                 f_in = open(
@@ -95,88 +90,70 @@ class SetDoc(Action):
             except FileNotFoundError:
                 print("The file does not exist")
 
-            read_bool = False
+            read_bool = False   # check if file exists
+
+            paper_details_dict = get_details(pdf_link)
+            paper_details_dict['added_date'] = added_time
+
             for data_line in data["url_history"]:
-                if doc_url == data_line["url"]:
+                if paper_details_dict['title'] == data_line["title"]:
                     read_bool = True
-                    doc_title = data_line["title"]
+                    doc_folder = data_line["folder"]
+                    est_read_time = json.load(open(doc_folder+'/details.log'))["read_time"]
+                    break
 
-            # preprocess and save text and chapters
-            cleaned_txt, doc_sections = preprocess_txt(doc_url)
-
-            # estimate reading time (250 WPM)
-            est_read_time = get_read_time(cleaned_txt)
-
+            dispatcher.utter_message(text="I'm chewing on the paper...")
+            # if not read, get paper details, preprocess, get est read time, 
             if not read_bool:
-                (
-                    doc_title,
-                    doc_author,
-                    doc_journal,
-                    url,
-                    doc_year,
-                    doc_publisher,
-                    doc_doi,
-                    doc_booktitle,
-                    doc_keywords,
-                    bibtex,
-                    arxiv_num,
-                ) = get_details(doc_url)
+                # preprocess and save text and chapters
+                if paper_details_dict['pdf'] != "null":
+                    cleaned_txt, doc_sections = preprocess_txt(paper_details_dict)
 
-                botResponse = f"So you are reading {doc_title}."
-                botResponse2 = f"It'll take an average person (250 WPM) {est_read_time} minutes to finish this paper. I bet you can read faster than that!"
+                    # estimate reading time (250 WPM)
+                    paper_details_dict['read_time'] = get_read_time(cleaned_txt)
+
+                    # save paper details
+                    doc_folder = os.path.join(LOG_FOLDER, paper_details_dict['title'])
+                    doc_details = os.path.join(doc_folder, "details.log")
+
+                    # save data to file
+                    try:
+                        # check if folder exists and update paper details/ url history
+                        if os.path.exists(doc_folder):
+                            update_json(paper_details_dict, doc_details)
+                        else:
+                            shutil.copytree(TEMPLATE_FOLDER, doc_folder)
+                            update_json(paper_details_dict, doc_details)
+                    except FileNotFoundError:
+                        print("The file does not exist")
+
+                    botResponse = f"So you are reading {paper_details_dict['title']}"
+                    botResponse2 = f"It'll take an average person (250 WPM) {paper_details_dict['read_time']} minutes to finish this paper. I bet you can read faster than that!"
+                    save_bool = True
+                else: 
+                    save_bool = False
+                    botResponse = f"Please give a valid pdf link"
+                    botResponse2 = f"Preferrably an arxiv pdf link"
             else:
-                botResponse = f"Oh, so you are reading {doc_title} again."
-                botResponse2 = f"It'll take an average person (250 WPM) {est_read_time} minutes to finish this paper. Are you sure about reading it again?"
+                botResponse = f"Oh, so you are reading {paper_details_dict['title']} again"
+                botResponse2 = f"It'll take an average person (250 WPM) {est_read_time} minutes to finish this paper"
 
-            # check if same title doc exists with different urls
-            saved_bool = False
-            for data_line in data["url_history"]:
-                if doc_title == data_line["title"]:
-                    saved_bool = True
+                save_bool = True
 
-            if not saved_bool:
-                doc_folder = os.path.join(LOG_FOLDER, arxiv_num)
-                doc_details = os.path.join(doc_folder, "details.log")
-
-                # save data to file
-                collected_data = dict(
-                    {
-                        "title": doc_title,
-                        "url": doc_url,
-                        "doi": doc_doi,
-                        "year": doc_year,
-                        "author": doc_author,
-                        "publisher": doc_publisher,
-                        "journal": doc_journal,
-                        "booktitle": doc_booktitle,
-                        "keywords": doc_keywords,
-                        "read_time": est_read_time,
-                        "bibtex": bibtex,
-                        "added_date": added_time,
-                    }
-                )
-
+            if save_bool:
+                # write dict of most recent pdf in url_history even when the same pdf is read
                 url_history = dict(
-                    {
-                        "title": doc_title,
-                        "url": doc_url,
-                        "folder": doc_folder,
-                        "added_date": added_time,
-                    }
-                )
-
-                try:
-                    # check if folder exists and update paper details/ url history
-                    if os.path.exists(doc_folder):
-                        update_json(collected_data, doc_details)
-                    else:
-                        shutil.copytree(TEMPLATE_FOLDER, doc_folder)
-                        update_json(collected_data, doc_details)
-                    if URL_LOG.is_file():
-                        write_json(url_history, URL_LOG)
-                except FileNotFoundError:
-                    print("The file does not exist")
-
+                        {
+                            "title": paper_details_dict['title'],
+                            "url": paper_details_dict['pdf'],
+                            "folder": doc_folder,
+                            "added_date": added_time,
+                        }
+                    )
+                
+                if URL_LOG.is_file():
+                    write_json(url_history, URL_LOG)
+        
         except requests.ConnectionError as exception:
             botResponse = f"Please give a valid link."
             botResponse2 = "..."

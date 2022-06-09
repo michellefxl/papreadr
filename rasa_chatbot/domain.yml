@@ -17,19 +17,22 @@ intents:
   - setnote
   - seenote
   - askquestion
+  - scitldr
   
 responses:
   utter_greet:
   - text: "Hey! I am Papr Readr bot, your paper reading companion. Here are some cool things I can do!"
 
   utter_geturl:
-  - text: "Please send me a link to the pdf."
+  - text: "Please give me a pdf url, local file path, doi (doi:) or title of the paper (title:)"
 
   utter_affirm:
-  - text: "Ok."
+  - text: "Okay"
+  - text: "Alright"
+  - text: "Ok"
 
   utter_deny:
-  - text: "Ok."
+  - text: "Ok"
 
   utter_bye:
   - text: "Seeya!"
@@ -38,7 +41,7 @@ responses:
   - text: "Please jot down your thoughts starting with 'Note:'"
 
   utter_question:
-  - text: "Ready to take your questions."
+  - text: "Ready to take your questions"
 
 actions:
 - action_summarize
@@ -50,6 +53,7 @@ actions:
 - action_bibtex
 - action_addnotes
 - action_getnotes
+- action_scitldr
 
 session_config:
   session_expiration_time: 60

@@ -17,6 +17,13 @@ rules:
 #   - intent: goodbye
 #   - action: utter_goodbye
 
+- rule: Say `hello` when the user starts a conversation with intent `greet`
+  conversation_start: true
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: action_help
+
 - rule: Say ok anytime the user says yes
   steps:
   - intent: affirm
@@ -31,6 +38,11 @@ rules:
   steps:
   - intent: goodbye
   - action: utter_bye
+
+- rule: set pdf
+  steps:
+  - intent: pdfurl
+  - action: action_setdoc
 
 - rule: Give citation anytime the user says cite
   steps:

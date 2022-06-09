@@ -26,3 +26,6 @@ TOP_K_ANS = 3
 MAX_ANS_LEN = 30
 
 TEMPLATE_FOLDER = LOG_FOLDER + "/" + "Template_folder"
+
+# scitldr model
+SCITLDR_MODEL = "../huggingface/allenai/scitldr"

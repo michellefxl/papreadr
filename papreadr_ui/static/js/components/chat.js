@@ -6,7 +6,8 @@
 function setPDFUrl(text){
     // if (text.indexOf("http://") > -1 || $.trim(text).indexOf("http://") > -1) {
     ifram = document.getElementById("pdfFrame");
-    url = "http://docs.google.com/gview?url=" + text + "&embedded=true"
+    // url = "http://docs.google.com/gview?url=" + text + "&embedded=true"
+    url = text
     ifram.src = url;
     // }
 }
@@ -361,6 +362,7 @@ function restartConversation() {
     $(".chats").html("");
     $(".usrInput").val("");
     send("/restart");
+    send("Hello");
 }
 // triggers restartConversation function.
 $("#restart").click(() => {
@@ -376,7 +378,11 @@ $(".usrInput").on("keyup keypress", (e) => {
     const text = $(".usrInput").val();
     if (keyCode === 13) {
         // if (text.indexOf("http://") > -1 || $.trim(text).indexOf("http://") > -1) {
-        if (text.indexOf("http") > -1) {
+        // if (text.indexOf("http") > -1) {
+        //     setPDFUrl(text);
+        // }
+
+        if (text.indexOf("pdf") > -1) {
             setPDFUrl(text);
         }
 
