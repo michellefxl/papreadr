@@ -1,4 +1,9 @@
 # Papr Readr Bot
+<img align="left" src="https://user-images.githubusercontent.com/100949943/174551969-848d7407-f618-4352-b1b5-9444947e5be2.png" height="150" alt="My Image">
+
+### Hi, I am Papr Readr Bot!
+Reading research papers can be a tedious and lonely task. We present Papr Readr Bot, a (chat)bot which aims to assist researchers in reading papers more effectively and with less cognitive effort by providing paper summaries, answering questions about the paper, extracting figures from the paper, taking notes, and generate citation. Papr Readr Bot demonstrates and provides hands-on experiences of various deep learning-based skills that can be integrated in useful and social conversational assistants for reading related contexts.
+
 
 ### Setup
 1. Install packages in conda env (environment.yml, requirements.txt)
