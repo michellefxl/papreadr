@@ -17,9 +17,9 @@ python download_models.py
 <img src="https://user-images.githubusercontent.com/100949943/165084052-214ae06c-66c0-438d-aa18-71c21b562688.png" width="auto" height="500" alt="web_ui"/>
 </p>
 <p align="center"><em>Figure: Web application V1</em></p>
-9.June 2022 - V2
+9.June 2022 - V2 Updated UI
 <p align="center">
-<img src="https://user-images.githubusercontent.com/100949943/172862973-a26fd005-4a87-422d-99a9-fe3cea65d776.png" width="auto" height="500" alt="web_ui"/>
+<img src="https://user-images.githubusercontent.com/100949943/172862973-a26fd005-4a87-422d-99a9-fe3cea65d776.png" width="auto" height="auto" alt="web_ui"/>
 </p>
 <p align="center"><em>Figure: Web application V2 in dark mode</em></p>
 
@@ -118,24 +118,13 @@ example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram
 4. Keywords extraction
 5. Citation generation
 6. Make/ show notes for specific papers (instead of notes, reviews?)
-7. Help function (shows list of selectable options) [not implemented on Telegram yet]
+7. Help function (shows list of selectable options)
 8. Scitldr, summarize abstract to one sentence
 9. Paper detail extraction through semantic scholar public api and arxivcheck
 
 ### Additional skills:
 - estimate time needed to read a paper based on average reading speed (250 WPM)
 - show word count after summarization 
-
-### TB implemented:
-1. Translation 
-2. Document highlighting
-3. Currently have a lot of paper details extracted through semantic scholar, but not shown (author, references, ...)
-4. Style transfer
-5. ASR + TTS
-6. Web search (open browser in new page)
-7. Knowledge graph generation (connectedpapers)
-8. Section extraction/ summarization
-9. Multimodal interaction: use camera + hand pose estimation to locate region of interest on paper
 
 <p align="left">
 <img src="https://user-images.githubusercontent.com/100949943/165086750-9518a167-b719-49a5-8a10-98b219a529f9.png" width="auto" height="600" />
