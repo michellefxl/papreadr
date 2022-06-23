@@ -1,10 +1,16 @@
 # Papr Readr Bot
+<img align="left" src="https://user-images.githubusercontent.com/100949943/174551969-848d7407-f618-4352-b1b5-9444947e5be2.png" height="150" alt="My Image">
+
+### Hi, I am Papr Readr Bot!
+Reading research papers can be a tedious and lonely task. We present Papr Readr Bot, a (chat)bot which aims to assist researchers in reading papers more effectively and with less cognitive effort by providing paper summaries, answering questions about the paper, extracting figures from the paper, taking notes, and generate citation. Papr Readr Bot demonstrates and provides hands-on experiences of various deep learning-based skills that can be integrated in useful and social conversational assistants for reading related contexts.
+
 
 ### Setup
 1. Install packages in conda env (environment.yml, requirements.txt)
 2. cd to huggingface folder and run the following script to download the models:
 - [Summarization model](https://huggingface.co/facebook/bart-large-cnn) 
 - [QnA model](https://huggingface.co/deepset/tinyroberta-squad2)
+- [SCITLDR](https://huggingface.co/lrakotoson/scitldr-catts-xsum-ao)
 ```
 python download_models.py
 ```
@@ -12,11 +18,15 @@ python download_models.py
 
 ### Versions:
 22.April 2022 - V1 [Demo paper submitted to CUI 2022](https://github.com/michellefxl/paprreadrbot/files/8554340/Papr_Readr_Bot__CUI_2022_Demo_Track_.pdf)
-
 <p align="center">
 <img src="https://user-images.githubusercontent.com/100949943/165084052-214ae06c-66c0-438d-aa18-71c21b562688.png" width="auto" height="500" alt="web_ui"/>
 </p>
 <p align="center"><em>Figure: Web application V1</em></p>
+9.June 2022 - V2 Updated UI
+<p align="center">
+<img src="https://user-images.githubusercontent.com/100949943/172862973-a26fd005-4a87-422d-99a9-fe3cea65d776.png" width="auto" height="auto" alt="web_ui"/>
+</p>
+<p align="center"><em>Figure: Web application V2 in dark mode</em></p>
 
 ### To train rasa model:
 ```
@@ -72,7 +82,8 @@ example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram
 │   ├── make_note.py            
 │   ├── show_note.py           
 │   ├── qna.py           
-│   ├── summarize.py            
+│   ├── summarize.py   
+│   ├── scitldr.py  
 │   └── ...   
 ├── data
 │   ├── nlu.yml             # set examples for intents
@@ -100,6 +111,7 @@ example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram
 │       ├── constants.js 
 │       └── script.js 
 ├── index.html              # web application
+├── Papr_Readr_Bot__CUI_2022_Demo_Track_.pdf    # project paper
 ├── LICENSE                 
 └── README.md               
 ```
@@ -111,20 +123,13 @@ example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram
 4. Keywords extraction
 5. Citation generation
 6. Make/ show notes for specific papers (instead of notes, reviews?)
-7. Help function (shows list of selectable options) [not implemented on Telegram yet]
+7. Help function (shows list of selectable options)
+8. Scitldr, summarize abstract to one sentence
+9. Paper detail extraction through semantic scholar public api and arxivcheck
 
 ### Additional skills:
 - estimate time needed to read a paper based on average reading speed (250 WPM)
-- show amount of content reduced after summarization 
-
-### TB implemented:
-1. Translation 
-2. Style transfer
-3. ASR + TTS
-4. Web search (open browser in new page)
-5. Knowledge graph generation (connectedpapers)
-6. Section extraction/ summarization
-7. Multimodal interaction: use camera + hand pose estimation to locate region of interest on paper
+- show word count after summarization 
 
 <p align="left">
 <img src="https://user-images.githubusercontent.com/100949943/165086750-9518a167-b719-49a5-8a10-98b219a529f9.png" width="auto" height="600" />
