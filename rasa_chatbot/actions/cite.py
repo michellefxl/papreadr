@@ -6,11 +6,9 @@ from rasa_sdk.executor import CollectingDispatcher
 
 import os
 import json
-from pathlib import Path
 
 from actions.actionconstants import *
-
-url_file = Path(URL_LOG)
+from actions.utils import log_user_msg
 
 
 class GetCitation(Action):
@@ -32,17 +30,20 @@ class GetCitation(Action):
 
         # get user input (TODO: besides arxiv)
         userMessage = tracker.latest_message["text"]
+        session_id = tracker.sender_id
+
+        log_user_msg(userMessage, session_id)
 
         try:
-            # get bibtex from history
+            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
             data = []
             bibtex = ""
             try:
                 f_in = open(
-                    URL_LOG,
+                    user_paper_log,
                 )
                 data = json.load(f_in)
-                doc_folder = data["url_history"][-1]["folder"]
+                doc_folder = data["paper_log"][-1]["folder"]
                 doc_details = os.path.join(doc_folder, "details.log")
                 with open(doc_details, "r") as file:
                     # First we load existing data into a dict.

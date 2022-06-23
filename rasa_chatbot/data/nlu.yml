@@ -149,7 +149,14 @@ nlu:
     - scitldr
     - one sentence summary 
     - one line summary
-    
+
+- intent: askid
+  examples: |
+    - what is my id
+    - tell me my session id 
+    - what is the conversation id
+    - session id
+    - conversation id
 
 
 # - intent: mood_great

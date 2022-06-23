@@ -18,10 +18,11 @@ intents:
   - seenote
   - askquestion
   - scitldr
+  - askid
   
 responses:
   utter_greet:
-  - text: "Hey! I am Papr Readr bot, your paper reading companion. Here are some cool things I can do!"
+  - text: "Hey! I am Papr Readr bot, your paper reading companion."
 
   utter_geturl:
   - text: "Please give me a pdf url, local file path, doi (doi:) or title of the paper (title:)"
@@ -54,6 +55,7 @@ actions:
 - action_addnotes
 - action_getnotes
 - action_scitldr
+- action_session_id
 
 session_config:
   session_expiration_time: 60

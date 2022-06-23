@@ -5,14 +5,11 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
 import yake
-from pathlib import Path
 import json
 import os
 
 from actions.actionconstants import *
-from actions.utils import update_json
-
-url_file = Path(URL_LOG)
+from actions.utils import update_json, log_user_msg
 
 
 def getKeyword(text):
@@ -68,18 +65,20 @@ class GetKeyword(Action):
 
         # get user input url
         userMessage = tracker.latest_message["text"]
+        session_id = tracker.sender_id
 
-        # check if valid url
+        log_user_msg(userMessage, session_id)
+
         try:
-            # get url from history
+            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
             data = []
             cleaned_txt = ""
             try:
                 f_in = open(
-                    url_file,
+                    user_paper_log,
                 )
                 data = json.load(f_in)
-                doc_folder = data["url_history"][-1]["folder"]
+                doc_folder = data["paper_log"][-1]["folder"]
                 doc_details = os.path.join(doc_folder, "details.log")
                 doc_text = os.path.join(doc_folder, "doc_text.log")
                 with open(doc_text, "r") as file:

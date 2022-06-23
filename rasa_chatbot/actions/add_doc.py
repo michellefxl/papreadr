@@ -34,12 +34,10 @@ import requests
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from datetime import datetime
-from pathlib import Path
-from datetime import datetime
 import json
 import os
 import shutil
+from datetime import datetime
 
 from actions.actionconstants import URL_LOG, LOG_FOLDER, TEMPLATE_FOLDER
 from actions.utils import (
@@ -48,9 +46,8 @@ from actions.utils import (
     get_read_time,
     preprocess_txt,
     get_details,
+    log_user_msg
 )
-
-URL_LOG = Path(URL_LOG)
 
 
 class SetDoc(Action):
@@ -74,13 +71,35 @@ class SetDoc(Action):
 
         # get user input url, (can be url, file path, doi or title)
         userMessage = tracker.latest_message["text"]
+        session_id = tracker.sender_id
+
+        log_user_msg(userMessage, session_id)
 
         try:
             
             pdf_link = userMessage
             added_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
-            # check if url exists in log
+            paper_details_dict = get_details(pdf_link)
+            paper_details_dict['added_date'] = added_time
+
+            # check if url exists in user's paper log
+            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
+            data_user = []
+            try:
+                f_in = open(
+                    user_paper_log,
+                )
+                data_user = json.load(f_in)
+            except FileNotFoundError:
+                print("The file does not exist")
+
+            user_read_bool = False
+            for data_line in data_user["paper_log"]:
+                if paper_details_dict['title'] == data_line["title"]:
+                    user_read_bool = True
+
+            # check if url exists in all papers log
             data = []
             try:
                 f_in = open(
@@ -91,10 +110,6 @@ class SetDoc(Action):
                 print("The file does not exist")
 
             read_bool = False   # check if file exists
-
-            paper_details_dict = get_details(pdf_link)
-            paper_details_dict['added_date'] = added_time
-
             for data_line in data["url_history"]:
                 if paper_details_dict['title'] == data_line["title"]:
                     read_bool = True
@@ -113,7 +128,7 @@ class SetDoc(Action):
                     paper_details_dict['read_time'] = get_read_time(cleaned_txt)
 
                     # save paper details
-                    doc_folder = os.path.join(LOG_FOLDER, paper_details_dict['title'])
+                    doc_folder = os.path.join(LOG_FOLDER + "/papers", paper_details_dict['title'])
                     doc_details = os.path.join(doc_folder, "details.log")
 
                     # save data to file
@@ -127,7 +142,7 @@ class SetDoc(Action):
                     except FileNotFoundError:
                         print("The file does not exist")
 
-                    botResponse = f"So you are reading {paper_details_dict['title']}"
+                    botResponse = f"So you are reading \"{paper_details_dict['title']}\""
                     botResponse2 = f"It'll take an average person (250 WPM) {paper_details_dict['read_time']} minutes to finish this paper. I bet you can read faster than that!"
                     save_bool = True
                 else: 
@@ -135,7 +150,10 @@ class SetDoc(Action):
                     botResponse = f"Please give a valid pdf link"
                     botResponse2 = f"Preferrably an arxiv pdf link"
             else:
-                botResponse = f"Oh, so you are reading {paper_details_dict['title']} again"
+                if user_read_bool:
+                    botResponse = f"Oh, so you are reading \"{paper_details_dict['title']}\" again! You added this paper on {data_line['added_date']}"
+                else: 
+                    botResponse = f"So you are reading \"{paper_details_dict['title']}\""
                 botResponse2 = f"It'll take an average person (250 WPM) {est_read_time} minutes to finish this paper"
 
                 save_bool = True
@@ -151,8 +169,8 @@ class SetDoc(Action):
                         }
                     )
                 
-                if URL_LOG.is_file():
-                    write_json(url_history, URL_LOG)
+                write_json(url_history, user_paper_log, jsonkey="paper_log")
+                write_json(url_history, URL_LOG)
         
         except requests.ConnectionError as exception:
             botResponse = f"Please give a valid link."

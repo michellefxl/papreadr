@@ -7,6 +7,7 @@ import requests
 import shutil
 from difflib import SequenceMatcher
 from semanticscholar import SemanticScholar
+from datetime import datetime
 
 from actions.actionconstants import LOG_FOLDER, TEMPLATE_FOLDER
 
@@ -493,3 +494,22 @@ def similar(a, b):
         degree of similarity
     """
     return SequenceMatcher(None, a, b).ratio()
+
+
+def log_user_msg(text, session_id):
+    """log unique user inputs
+
+    Args:
+        text (string): user message
+        session_id (string): user session id
+
+    Returns:
+        None
+    """
+    user_folder = os.path.join(LOG_FOLDER + "/users", session_id + "/chat.log")
+    user_msg = {
+        "text": text,
+        "input_time": datetime.now().strftime("%Y-%m-%d_%H:%M:%S"),
+    }
+    write_json(user_msg, user_folder, jsonkey="chat_history")
+    return None

@@ -6,15 +6,11 @@ from rasa_sdk.executor import CollectingDispatcher
 
 import fitz
 import requests
-import io
 import os
-from pathlib import Path
-from PIL import Image
 import json
 
 from actions.actionconstants import URL_LOG
-
-URL_LOG = Path(URL_LOG)
+from actions.utils import log_user_msg
 
 
 def getFigs(URL, fig_folder):
@@ -84,18 +80,20 @@ class ExtractFigs(Action):
 
         # get user input url
         userMessage = tracker.latest_message["text"]
+        session_id = tracker.sender_id
 
-        # check if valid url
+        log_user_msg(userMessage, session_id)
+
         try:
-            # get url from history
+            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
             data = []
             try:
                 f_in = open(
-                    URL_LOG,
+                    user_paper_log,
                 )
                 data = json.load(f_in)
-                doc_url = data["url_history"][-1]["url"]
-                doc_folder = data["url_history"][-1]["folder"]
+                doc_url = data["paper_log"][-1]["url"]
+                doc_folder = data["paper_log"][-1]["folder"]
                 fig_folder = os.path.join(doc_folder, "figures")
             except FileNotFoundError:
                 print("The file does not exist")

@@ -6,6 +6,7 @@ stories:
   steps:
   - intent: greet
   - action: utter_greet
+  - action: action_session_id
   - action: action_help
 
 - story: affirm path
@@ -78,3 +79,8 @@ stories:
   - action: utter_question
   - intent: question
   - action: action_answer_question
+
+- story:  get session id path
+  steps:
+  - intent: askid
+  - action: action_session_id

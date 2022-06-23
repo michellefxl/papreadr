@@ -4,6 +4,7 @@
 LOG_FOLDER = "../chat_history"
 
 URL_LOG = LOG_FOLDER + "/" + "url.log"
+USER_LOG = LOG_FOLDER + "/" + "user_ids.log"
 # URL_LOG = LOG_FOLDER + "/" + "url_history.txt"
 
 CHAT_LOG = LOG_FOLDER + "/" + "chat.log"
@@ -25,7 +26,8 @@ QNA_HF_MODEL = "../huggingface/deepset/tinyroberta-squad2"
 TOP_K_ANS = 3
 MAX_ANS_LEN = 30
 
-TEMPLATE_FOLDER = LOG_FOLDER + "/" + "Template_folder"
+TEMPLATE_FOLDER = LOG_FOLDER + "/" + "paper_template_folder"
+USER_TEMPLATE_FOLDER = LOG_FOLDER + "/" + "user_template_folder"
 
 # scitldr model
 SCITLDR_MODEL = "../huggingface/allenai/scitldr"

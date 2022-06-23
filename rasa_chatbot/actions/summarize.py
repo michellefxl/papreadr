@@ -9,14 +9,11 @@ from lexrank import LexRank
 from lexrank.mappings.stopwords import STOPWORDS
 from transformers import pipeline
 
-from pathlib import Path
 import json
 import os
 
 from actions.actionconstants import *
-from actions.utils import update_json
-
-url_file = Path(URL_LOG)
+from actions.utils import update_json, log_user_msg
 
 
 def getSummary(cleaned_txt):
@@ -66,19 +63,22 @@ class SummarizeDoc(Action):
 
         # get user input
         userMessage = tracker.latest_message["text"]
+        session_id = tracker.sender_id
+
+        log_user_msg(userMessage, session_id)
 
         try:
-            # get text from history
+            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
             data = []
             try:
                 f_in = open(
-                    URL_LOG,
+                    user_paper_log,
                 )
                 data = json.load(f_in)
                 # take latest document url
-                doc_url = data["url_history"][-1]["url"]
-                title = data["url_history"][-1]["title"]
-                doc_folder = data["url_history"][-1]["folder"]
+                doc_url = data["paper_log"][-1]["url"]
+                title = data["paper_log"][-1]["title"]
+                doc_folder = data["paper_log"][-1]["folder"]
             except FileNotFoundError:
                 print("The file does not exist")
 
@@ -110,7 +110,7 @@ class SummarizeDoc(Action):
 
                 # decide on summary of doc or summary of section
                 summary = getSummary(cleaned_txt)
-                title = data["url_history"][-1]["title"]
+                title = data["paper_log"][-1]["title"]
                 summary_dic = dict({"summary": summary})
                 update_json(summary_dic, doc_details)
 

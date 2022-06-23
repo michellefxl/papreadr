@@ -23,7 +23,7 @@ class GetHelp(Action):
     ) -> List[Dict[Text, Any]]:
 
         # Web_ui selectable options
-        botResponse = "Just press the button and I'll do the magic."
+        botResponse = "Here are some cool things I can do! Just press the button and I'll do the magic."
 
         # bot response
         data = [

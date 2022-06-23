@@ -3,15 +3,12 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from pathlib import Path
 import json
 import os
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from actions.actionconstants import *
-from actions.utils import update_json
-
-url_file = Path(URL_LOG)
+from actions.utils import log_user_msg
 
 
 def getScitldr(abstract):
@@ -51,15 +48,19 @@ class Scitldr(Action):
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
 
-        # get text from history
+        session_id = tracker.sender_id
+
+        log_user_msg(tracker.latest_message["text"], session_id)
+
+        user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
         data = []
         try:
             f_in = open(
-                URL_LOG,
+                user_paper_log,
             )
             data = json.load(f_in)
             # take latest document url
-            doc_folder = data["url_history"][-1]["folder"]
+            doc_folder = data["paper_log"][-1]["folder"]
         except FileNotFoundError:
             print("The file does not exist")
 

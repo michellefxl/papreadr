@@ -6,15 +6,11 @@ from rasa_sdk.executor import CollectingDispatcher
 
 
 from transformers import pipeline
-from pathlib import Path
 import json
 import os
 
 from actions.actionconstants import *
 from actions.utils import write_json, similar
-
-url_file = Path(URL_LOG)
-
 
 def getAnswer(context, question):
     """get answer from model
@@ -66,17 +62,18 @@ class AnswerQuestion(Action):
         # get user input url
         userMessage = tracker.latest_message["text"]
         question = userMessage
+        session_id = tracker.sender_id
 
         try:
-            # get text from history
+            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
             data = []
             cleaned_txt = ""
             try:
                 f_in = open(
-                    URL_LOG,
+                    user_paper_log,
                 )
                 data = json.load(f_in)
-                doc_folder = data["url_history"][-1]["folder"]
+                doc_folder = data["paper_log"][-1]["folder"]
                 doc_text = os.path.join(doc_folder, "doc_text.log")
                 with open(doc_text, "r") as file:
                     # First we load existing data into a dict.
