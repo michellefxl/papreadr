@@ -20,10 +20,11 @@ intents:
   - scitldr
   - askid
   - getpaperlog
+  - getpaperref
   
 responses:
   utter_greet:
-  - text: "Hey! I am Papr Readr bot, your paper reading companion."
+  - text: "Hey! I am Papr Readr bot, your paper reading companion"
 
   utter_geturl:
   - text: "Please give me a pdf url, local file path, doi (doi:) or title of the paper (title:)"
@@ -58,6 +59,7 @@ actions:
 - action_scitldr
 - action_session_id
 - action_paper_log
+- action_paper_ref
 
 session_config:
   session_expiration_time: 60

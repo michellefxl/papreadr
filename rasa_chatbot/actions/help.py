@@ -28,8 +28,10 @@ class GetHelp(Action):
         # bot response
         data = [
             {"title": "add pdf", "payload": "/setdoc"},
+            {"title": "read log", "payload": "/getpaperlog"},
             {"title": "scitldr", "payload": "/scitldr"},
             {"title": "summary", "payload": "/summarize_doc"},
+            {"title": "paper references", "payload": "/getpaperref"},
             {"title": "show figures", "payload": "/getfigs"},
             {"title": "show keywords", "payload": "/getkeywords"},
             {"title": "cite bibtex", "payload": "/getcite"},
@@ -40,7 +42,7 @@ class GetHelp(Action):
         dispatcher.utter_message(text=botResponse, json_message=message)
 
         # Telegram help
-        # botResponse = "- add doc \n- scitldr \n- summarize \n- answer questions \n- get figures \n- get keywords \n- get citation \n- take notes \n- show notes"
+        # botResponse = "- add doc \n- read log \n- scitldr \n- summarize \n- paper references \n- answer questions \n- get figures \n- get keywords \n- get citation \n- take notes \n- show notes"
         # dispatcher.utter_message(text=botResponse)
 
         return []

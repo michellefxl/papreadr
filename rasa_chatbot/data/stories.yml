@@ -89,3 +89,8 @@ stories:
   steps:
   - intent: getpaperlog
   - action: action_paper_log
+
+- story:  get paper ref
+  steps:
+  - intent: getpaperref
+  - action: action_paper_ref

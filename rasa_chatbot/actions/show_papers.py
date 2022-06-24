@@ -10,7 +10,7 @@ from actions.utils import log_user_msg
 
 
 class ShowPaperLog(Action):
-    """retrieve user conversation session id
+    """retrieve user read papers
 
     Args:
         Action
@@ -48,17 +48,21 @@ class ShowPaperLog(Action):
         for data_line in data['paper_log']:
             if data_line['title'] not in dup_paper:
                 dup_paper.append(data_line['title'])
-                response_data.append({"title": data_line['title'], "payload": data_line['url']})
+                doc_folder = data_line["folder"]
+                venue = json.load(open(doc_folder + "/details.log"))["publisher"]
+                year = json.load(open(doc_folder + "/details.log"))["year"]
+                paper_data = f"{data_line['title']}, {venue}, {year}"
+                response_data.append({"title": paper_data, "payload": data_line['url']})
             else:
                 continue
 
         paper_count = len(response_data)
         if paper_count == 1:
-            botResponse = f"You have read {paper_count} papers! Keep it up!"
+            botResponse = f"You have read {paper_count} paper! Keep it up! 😀"
         elif paper_count == 0:
-            botResponse = f"I have not read any papers with you. Let's start reading together!"
+            botResponse = f"I have not read any papers with you. Let's start reading together! 💪"
         else:
-            botResponse = f"You have read {paper_count} papers! Good job!"
+            botResponse = f"You have read {paper_count} papers! Good job! 😉"
 
         print(response_data)
         # selectable options

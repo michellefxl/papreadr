@@ -125,7 +125,7 @@ div.chats::-webkit-scrollbar {
   border-radius: 1.5em;
   max-width: 60%;
   min-width: 25%;
-  font-size: 15px;
+  font-size: 16px;
   word-wrap: break-word;
   border-radius: 5px 20px 20px 20px;
 }
@@ -174,7 +174,7 @@ textarea-webkit-scrollbar {
   background: rgb(30,144,255);
   color: white;
   margin-bottom: 0.15em;
-  font-size: 15px;
+  font-size: 16px;
   max-width: 65%;
   min-width: 15%;
   border-radius: 20px 5px 20px 20px;

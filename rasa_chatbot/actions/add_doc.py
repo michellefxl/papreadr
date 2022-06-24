@@ -142,20 +142,22 @@ class SetDoc(Action):
                     except FileNotFoundError:
                         print("The file does not exist")
 
-                    botResponse = f"So you are reading \"{paper_details_dict['title']}\""
-                    botResponse2 = f"It'll take an average person (250 WPM) {paper_details_dict['read_time']} minutes to finish this paper. I bet you can read faster than that!"
+                    paper_data = f"{paper_details_dict['title']}, {paper_details_dict['publisher']}, {paper_details_dict['year']}"
+                    botResponse = f"So you are reading \"{paper_data}\""
+                    botResponse2 = f"It'll take an average person (250 WPM) {paper_details_dict['read_time']} minutes to finish this paper. I bet you can read faster than that! 🤓"
                     save_bool = True
                 else: 
                     save_bool = False
                     botResponse = f"Please give a valid pdf link"
                     botResponse2 = f"Preferrably an arxiv pdf link"
             else:
+                paper_data = f"{paper_details_dict['title']}, {paper_details_dict['publisher']}, {paper_details_dict['year']}"
                 if user_read_bool:
                     add_date = datetime.strptime(data_line['added_date'], "%Y-%m-%d_%H:%M:%S").strftime("%A, %m/%d/%Y, %H:%M:%S")
-                    botResponse = f"Oh, so you are reading \"{paper_details_dict['title']}\" again! You added this paper on {add_date}"
+                    botResponse = f"Oh, so you are reading \"{paper_data}\" again! You added this paper on {add_date}"
                 else: 
-                    botResponse = f"So you are reading \"{paper_details_dict['title']}\""
-                botResponse2 = f"It'll take an average person (250 WPM) {est_read_time} minutes to finish this paper"
+                    botResponse = f"So you are reading \"{paper_data}\""
+                botResponse2 = f"It'll take an average person (250 WPM) {est_read_time} minutes to finish this paper 🤓"
 
                 save_bool = True
 

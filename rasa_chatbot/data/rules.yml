@@ -74,3 +74,8 @@ rules:
   steps:
   - intent: getpaperlog
   - action: action_paper_log
+
+- rule: Get paper ref anytime user ask
+  steps:
+  - intent: getpaperref
+  - action: action_paper_ref

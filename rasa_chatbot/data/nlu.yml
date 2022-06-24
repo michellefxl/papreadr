@@ -165,6 +165,12 @@ nlu:
     - show me my read history
     - read history
     - paper log
+  
+- intent: getpaperref
+  examples: |
+    - show paper references
+    - references
+    - paper references
     
 # - intent: mood_great
 #   examples: |
