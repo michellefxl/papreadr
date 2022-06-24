@@ -19,6 +19,7 @@ intents:
   - askquestion
   - scitldr
   - askid
+  - getpaperlog
   
 responses:
   utter_greet:
@@ -56,6 +57,7 @@ actions:
 - action_getnotes
 - action_scitldr
 - action_session_id
+- action_paper_log
 
 session_config:
   session_expiration_time: 60

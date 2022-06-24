@@ -151,7 +151,8 @@ class SetDoc(Action):
                     botResponse2 = f"Preferrably an arxiv pdf link"
             else:
                 if user_read_bool:
-                    botResponse = f"Oh, so you are reading \"{paper_details_dict['title']}\" again! You added this paper on {data_line['added_date']}"
+                    add_date = datetime.strptime(data_line['added_date'], "%Y-%m-%d_%H:%M:%S").strftime("%A, %m/%d/%Y, %H:%M:%S")
+                    botResponse = f"Oh, so you are reading \"{paper_details_dict['title']}\" again! You added this paper on {add_date}"
                 else: 
                     botResponse = f"So you are reading \"{paper_details_dict['title']}\""
                 botResponse2 = f"It'll take an average person (250 WPM) {est_read_time} minutes to finish this paper"

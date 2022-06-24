@@ -84,3 +84,8 @@ stories:
   steps:
   - intent: askid
   - action: action_session_id
+
+- story:  get paper log
+  steps:
+  - intent: getpaperlog
+  - action: action_paper_log

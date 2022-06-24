@@ -69,3 +69,8 @@ rules:
   steps:
   - intent: askid
   - action: action_session_id
+
+- rule: Get paper log anytime user ask
+  steps:
+  - intent: getpaperlog
+  - action: action_paper_log

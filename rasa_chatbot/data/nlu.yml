@@ -158,7 +158,14 @@ nlu:
     - session id
     - conversation id
 
-
+- intent: getpaperlog
+  examples: |
+    - what papers have I read
+    - show me my paper log
+    - show me my read history
+    - read history
+    - paper log
+    
 # - intent: mood_great
 #   examples: |
 #     - perfect
