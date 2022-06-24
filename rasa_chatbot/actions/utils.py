@@ -198,7 +198,7 @@ def preprocess_txt(paper_dict):
     # check if URL doc is preprocessed and saved already
     # if not run preprocessing
     processed_bool = False
-    paper_folder = os.path.join(LOG_FOLDER, paper_dict['title'])
+    paper_folder = os.path.join(LOG_FOLDER + "/papers", paper_dict['title'])
     paper_text = os.path.join(paper_folder, "doc_text.log")
     if os.path.exists(paper_folder):
         if Path(paper_text).is_file():

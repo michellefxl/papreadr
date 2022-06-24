@@ -151,6 +151,11 @@ class SetDoc(Action):
                     botResponse = f"Please give a valid pdf link"
                     botResponse2 = f"Preferrably an arxiv pdf link"
             else:
+                # double check if paper txt is processed
+                doc_text = json.load(open(os.path.join(doc_folder, "doc_text.log")))
+                if not doc_text:
+                    _, _ = preprocess_txt(paper_details_dict)
+
                 paper_data = f"{paper_details_dict['title']}, {paper_details_dict['publisher']}, {paper_details_dict['year']}"
                 if user_read_bool:
                     add_date = datetime.strptime(data_line['added_date'], "%Y-%m-%d_%H:%M:%S").strftime("%A, %m/%d/%Y, %H:%M:%S")
