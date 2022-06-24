@@ -75,8 +75,8 @@ class SetDoc(Action):
 
         log_user_msg(userMessage, session_id)
 
+        referesh_pdf_viewer = False
         try:
-            
             pdf_link = userMessage
             added_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
@@ -146,8 +146,10 @@ class SetDoc(Action):
                     botResponse = f"So you are reading \"{paper_data}\""
                     botResponse2 = f"It'll take an average person (250 WPM) {paper_details_dict['read_time']} minutes to finish this paper. I bet you can read faster than that! 🤓"
                     save_bool = True
+                    referesh_pdf_viewer = True
                 else: 
                     save_bool = False
+                    referesh_pdf_viewer = False
                     botResponse = f"Please give a valid pdf link"
                     botResponse2 = f"Preferrably an arxiv pdf link"
             else:
@@ -165,6 +167,7 @@ class SetDoc(Action):
                 botResponse2 = f"It'll take an average person (250 WPM) {est_read_time} minutes to finish this paper 🤓"
 
                 save_bool = True
+                referesh_pdf_viewer = True
 
             if save_bool:
                 # write dict of most recent pdf in url_history even when the same pdf is read
@@ -179,13 +182,17 @@ class SetDoc(Action):
                 
                 write_json(url_history, user_paper_log, jsonkey="paper_log")
                 write_json(url_history, URL_LOG)
-        
         except requests.ConnectionError as exception:
+            referesh_pdf_viewer = False
             botResponse = f"Please give a valid link."
             botResponse2 = "..."
 
         # bot response
         dispatcher.utter_message(text=botResponse)
         dispatcher.utter_message(text=botResponse2)
+
+        if referesh_pdf_viewer:
+            message = {"payload": "pdfLink", "data": paper_details_dict["pdf"]}
+            dispatcher.utter_message(text="", json_message=message)
 
         return []

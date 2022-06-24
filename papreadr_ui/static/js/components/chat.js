@@ -147,6 +147,13 @@ function setBotResponse(response) {
                         return;
                     }
 
+                    if (payload === "pdfLink") {
+                        // check if custom payload type is "pdfLink"
+                        setPDFUrl(response[i].custom.data)
+                        scrollToBottomOfResults();
+                        return;
+                    }
+
                     // check if the custom payload type is "pdf_attachment"
                     if (payload === "pdf_attachment") {
                         renderPdfAttachment(response[i]);
@@ -382,9 +389,9 @@ $(".usrInput").on("keyup keypress", (e) => {
         //     setPDFUrl(text);
         // }
 
-        if (text.indexOf("pdf") > -1) {
-            setPDFUrl(text);
-        }
+        // if (text.indexOf("pdf") > -1) {
+        //     setPDFUrl(text);
+        // }
 
         if (text === "" || $.trim(text) === "") {
             e.preventDefault();
@@ -416,10 +423,10 @@ $(".usrInput").on("keyup keypress", (e) => {
 
 $("#sendButton").on("click", (e) => {
     const text = $(".usrInput").val();
-    if (text.indexOf("http") > -1) {
-    setPDFUrl(text);
-    //     document.getElementById("pdfFrame").contentWindow.location.reload();
-    }
+    // if (text.indexOf("http") > -1) {
+    // setPDFUrl(text);
+    // //     document.getElementById("pdfFrame").contentWindow.location.reload();
+    // }
     
     if (text === "" || $.trim(text) === "") {
         e.preventDefault();
