@@ -13,7 +13,7 @@ function createCollapsible(collapsible_data) {
 
         collapsible_list += collapsible_item;
     }
-    const collapsible_contents = `<ul class="collapsible">${collapsible_list}</ul>`;
+    const collapsible_contents = `<div class="noBullets"><ul class="collapsible">${collapsible_list}</ul></div>`;
     $(collapsible_contents).appendTo(".chats");
 
     // initialize the collapsible

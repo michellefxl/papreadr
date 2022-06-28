@@ -753,12 +753,17 @@ div.content_data::-webkit-scrollbar {
 
 /* css for collapsible */
 
+.noBullets {
+  list-style-type:none !important;
+  color: rgb(0, 0, 0);
+  }
+
 .collapsible {
   margin-top: 5px;
-  margin-left: 5%;
+  margin-left: 18%;
   max-width: 60%;
   min-width: 25%;
-  font-size: 13px;
+  font-size: 15px;
   word-wrap: break-word;
   border-radius: 20px;
   background: white;
