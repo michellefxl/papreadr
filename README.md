@@ -84,6 +84,9 @@ example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram
 │   ├── qna.py           
 │   ├── summarize.py   
 │   ├── scitldr.py  
+│   ├── session_id.py  
+│   ├── show_papers.py  
+│   ├── show_ref.py 
 │   └── ...   
 ├── data
 │   ├── nlu.yml             # set examples for intents
@@ -126,6 +129,8 @@ example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram
 7. Help function (shows list of selectable options)
 8. Scitldr, summarize abstract to one sentence
 9. Paper detail extraction through semantic scholar public api and arxivcheck
+10. Show read history with links to papers and details on paper field, year, publisher 
+11. Show papers in reference with url
 
 ### Additional skills:
 - estimate time needed to read a paper based on average reading speed (250 WPM)
