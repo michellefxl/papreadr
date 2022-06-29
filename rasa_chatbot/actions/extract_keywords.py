@@ -69,34 +69,32 @@ class GetKeyword(Action):
 
         log_user_msg(userMessage, session_id)
 
+        user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
+        data = []
+        cleaned_txt = ""
         try:
-            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
-            data = []
-            cleaned_txt = ""
-            try:
-                f_in = open(
-                    user_paper_log,
-                )
-                data = json.load(f_in)
+            f_in = open(
+                user_paper_log,
+            )
+            data = json.load(f_in)
+            if len(data["paper_log"]) > 0:
                 doc_folder = data["paper_log"][-1]["folder"]
                 doc_details = os.path.join(doc_folder, "details.log")
                 doc_text = os.path.join(doc_folder, "doc_text.log")
                 with open(doc_text, "r") as file:
                     # First we load existing data into a dict.
                     cleaned_txt = json.load(file)["text"]
-            except FileNotFoundError:
-                print("The file does not exist")
-
-            # get keyword from document
-            keywords = getKeyword(cleaned_txt)
-            keyword_dict = dict({"keywords": keywords})
-            update_json(keyword_dict, doc_details)
-
-            botResponse = f"YAKE extracted the keywords for you: {keywords}"
-        except:
-            botResponse = f"Sorry, I can't do it."
-
-        # bot response
-        dispatcher.utter_message(text=botResponse)
+                # get keyword from document
+                keywords = getKeyword(cleaned_txt)
+                keyword_dict = dict({"keywords": keywords})
+                update_json(keyword_dict, doc_details)
+                
+                botResponse = f"YAKE extracted the keywords for you: {keywords}"
+            else:
+                botResponse = "🤔 I have not read any papers with you. Please add a paper"
+            # bot response
+            dispatcher.utter_message(text=botResponse)
+        except FileNotFoundError:
+            print("The file does not exist")
 
         return []

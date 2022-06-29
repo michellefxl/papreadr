@@ -34,29 +34,26 @@ class GetCitation(Action):
 
         log_user_msg(userMessage, session_id)
 
+        user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
+        data = []
+        bibtex = ""
         try:
-            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
-            data = []
-            bibtex = ""
-            try:
-                f_in = open(
-                    user_paper_log,
-                )
-                data = json.load(f_in)
+            f_in = open(
+                user_paper_log,
+            )
+            data = json.load(f_in)
+            if len(data["paper_log"]) > 0:
                 doc_folder = data["paper_log"][-1]["folder"]
                 doc_details = os.path.join(doc_folder, "details.log")
                 with open(doc_details, "r") as file:
                     # First we load existing data into a dict.
                     bibtex = json.load(file)["bib"]
-            except FileNotFoundError:
-                print("The file does not exist")
-
-            botResponse = bibtex
-
-        except requests.ConnectionError as exception:
-            botResponse = f"Please give a valid link."
-
-        # bot response
-        dispatcher.utter_message(text=botResponse)
+                botResponse = bibtex
+            else:
+                botResponse = "🤔 I have not read any papers with you. Please add the paper you want to cite"
+            # bot response
+            dispatcher.utter_message(text=botResponse)
+        except FileNotFoundError:
+            print("The file does not exist")
 
         return []

@@ -59,52 +59,49 @@ class AnswerQuestion(Action):
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
 
-        # get user input url
         userMessage = tracker.latest_message["text"]
         question = userMessage
         session_id = tracker.sender_id
 
+        user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
+        data = []
+        cleaned_txt = ""
         try:
-            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
-            data = []
-            cleaned_txt = ""
-            try:
-                f_in = open(
-                    user_paper_log,
-                )
-                data = json.load(f_in)
+            f_in = open(
+                user_paper_log,
+            )
+            data = json.load(f_in)
+            if len(data["paper_log"]) > 0:
                 doc_folder = data["paper_log"][-1]["folder"]
                 doc_text = os.path.join(doc_folder, "doc_text.log")
                 with open(doc_text, "r") as file:
                     # First we load existing data into a dict.
                     cleaned_txt = json.load(file)["text"]
-            except FileNotFoundError:
-                print("The file does not exist")
+                # TODO: add more features
+                # get answer from elsewhere
+                # extract section
+                # get list of past documents
 
-            # TODO: add more features
-            # get answer from elsewhere
-            # extract section
-            # get list of past documents
+                # get answer from document
+                answer = getAnswer(cleaned_txt, question)
 
-            # get answer from document
-            answer = getAnswer(cleaned_txt, question)
+                answer_str = ""
+                for a in answer:
+                    answer_str = answer_str + "\n" + "- " + a
 
-            answer_str = ""
-            for a in answer:
-                answer_str = answer_str + "\n" + "- " + a
+                qna_file = os.path.join(doc_folder, "qna.log")
+                new_data = dict({"question": question, "answer": answer})
+                write_json(new_data, qna_file, "doc_qna")
 
-            qna_file = os.path.join(doc_folder, "qna.log")
-            new_data = dict({"question": question, "answer": answer})
-            write_json(new_data, qna_file, "doc_qna")
-
-            if answer_str != "":
-                botResponse = f"Just a heads up, ROBERTA might be wrong. \nBut anyway ROBERTA says the answers are: {answer_str}"
+                if answer_str != "":
+                    botResponse = f"Just a heads up, ROBERTA might be wrong. \nBut anyway ROBERTA says the answers are: {answer_str}"
+                else:
+                    botResponse = f"Sorry, I can't retrieve the answer"
             else:
-                botResponse = f"Sorry, I can't retrieve the answer."
-        except:
-            botResponse = f"Sorry, I can't retrieve the answer."
-
-        # bot response
-        dispatcher.utter_message(text=botResponse)
+                botResponse = "🤔 Which paper are you reading? Please add a paper"        
+            # bot response
+            dispatcher.utter_message(text=botResponse)        
+        except FileNotFoundError:
+            print("The file does not exist")
 
         return []

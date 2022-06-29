@@ -9,7 +9,7 @@ import requests
 import os
 import json
 
-from actions.actionconstants import URL_LOG
+from actions.actionconstants import LOG_FOLDER
 from actions.utils import log_user_msg
 
 
@@ -84,37 +84,37 @@ class ExtractFigs(Action):
 
         log_user_msg(userMessage, session_id)
 
+        user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
+        data = []
         try:
-            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
-            data = []
-            try:
-                f_in = open(
-                    user_paper_log,
-                )
-                data = json.load(f_in)
+            f_in = open(
+                user_paper_log,
+            )
+            data = json.load(f_in)
+            if len(os.listdir(fig_folder)) > 0:
                 doc_url = data["paper_log"][-1]["url"]
                 doc_folder = data["paper_log"][-1]["folder"]
                 fig_folder = os.path.join(doc_folder, "figures")
-            except FileNotFoundError:
-                print("The file does not exist")
 
-            # get figures from document
-            getFigs(doc_url, fig_folder)
+                # get figures from document
+                getFigs(doc_url, fig_folder)
 
-        except:
-            botResponse = f"Sorry, I can't do it."
+                if len(os.listdir(fig_folder)) > 0:
+                    botResponse = f"I have extracted and saved the figures for you:"
+                    # bot response
+                    dispatcher.utter_message(text=botResponse)
 
-        if len(os.listdir(fig_folder)) > 0:
-            botResponse = f"I have extracted and saved the figures for you:"
-            # bot response
-            dispatcher.utter_message(text=botResponse)
-
-            img_paths = [os.path.join(fig_folder, x) for x in os.listdir(fig_folder)]
-            for imgp in img_paths:
-                print(imgp)
-                dispatcher.utter_message(image=imgp)
-        else:
-            botResponse = f"Oops, no figures extracted."
-            dispatcher.utter_message(text=botResponse)
+                    img_paths = [os.path.join(fig_folder, x) for x in os.listdir(fig_folder)]
+                    for imgp in img_paths:
+                        print(imgp)
+                        dispatcher.utter_message(image=imgp)
+                else:
+                    botResponse = f"Oops, no figures extracted."
+                    dispatcher.utter_message(text=botResponse)
+            else:
+                botResponse = "🤔 I have not read any papers with you. Please add a paper"
+                dispatcher.utter_message(text=botResponse)
+        except FileNotFoundError:
+            print("The file does not exist")
 
         return []

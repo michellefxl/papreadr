@@ -67,79 +67,74 @@ class SummarizeDoc(Action):
 
         log_user_msg(userMessage, session_id)
 
+        user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
+        data = []
         try:
-            user_paper_log = os.path.join(LOG_FOLDER + "/users", session_id + "/paper.log")
-            data = []
-            try:
-                f_in = open(
-                    user_paper_log,
-                )
-                data = json.load(f_in)
-                # take latest document url
-                doc_url = data["paper_log"][-1]["url"]
+            f_in = open(
+                user_paper_log,
+            )
+            data = json.load(f_in)
+            # take latest document url
+            if len(data["paper_log"]) > 0:
                 title = data["paper_log"][-1]["title"]
                 doc_folder = data["paper_log"][-1]["folder"]
-            except FileNotFoundError:
-                print("The file does not exist")
+                doc_details = os.path.join(doc_folder, "details.log")
 
-            doc_details = os.path.join(doc_folder, "details.log")
-
-            # check if summary exists
-            read_bool = False
-            data_sum = []
-            try:
-                f_in = open(
-                    doc_details,
-                )
+                # check if summary exists
+                read_bool = False
+                data_sum = []
                 try:
-                    data_sum = json.load(f_in)
-                    summary = data_sum["summary"]
-                    read_bool = True
-                except:
-                    print("No summary")
-            except FileNotFoundError:
-                print("The file does not exist")
-
-            if not read_bool:
-                response = requests.get(doc_url)
-                # get document summary
-                doc_text = os.path.join(doc_folder, "doc_text.log")
-                with open(doc_text, "r") as file:
-                    # First we load existing data into a dict.
-                    cleaned_txt = json.load(file)["text"]
-
-                # decide on summary of doc or summary of section
-                summary = getSummary(cleaned_txt)
-                title = data["paper_log"][-1]["title"]
-                summary_dic = dict({"summary": summary})
-                update_json(summary_dic, doc_details)
-
-                sum_ratio = round(
-                    (
-                        (len(cleaned_txt.split()) - len(summary.split()))
-                        / len(cleaned_txt.split())
+                    f_in = open(
+                        doc_details,
                     )
-                    * 100
-                )
+                    try:
+                        data_sum = json.load(f_in)
+                        summary = data_sum["summary"]
+                        read_bool = True
+                    except:
+                        print("No summary")
+                except FileNotFoundError:
+                    print("The file does not exist")
 
-                sum_word_count = len(summary.split())
-                
-                # botResponse = f"The summary from BART is {sum_ratio}% shorter than the original document."
-                # botResponse2 = f"Summary of {title}: {summary}"
-                botResponse = f"Here's a {sum_word_count} words summary of {title} from BART!"
-                botResponse2 = f"{summary}"
+                if not read_bool:
+                    # get document summary
+                    doc_text = os.path.join(doc_folder, "doc_text.log")
+                    with open(doc_text, "r") as file:
+                        # First we load existing data into a dict.
+                        cleaned_txt = json.load(file)["text"]
+
+                    # decide on summary of doc or summary of section
+                    summary = getSummary(cleaned_txt)
+                    title = data["paper_log"][-1]["title"]
+                    summary_dic = dict({"summary": summary})
+                    update_json(summary_dic, doc_details)
+
+                    sum_ratio = round(
+                        (
+                            (len(cleaned_txt.split()) - len(summary.split()))
+                            / len(cleaned_txt.split())
+                        )
+                        * 100
+                    )
+
+                    sum_word_count = len(summary.split())
+                    
+                    # botResponse = f"The summary from BART is {sum_ratio}% shorter than the original document."
+                    # botResponse2 = f"Summary of {title}: {summary}"
+                    botResponse = f"Here's a {sum_word_count} words summary of {title} from BART!"
+                    botResponse2 = f"{summary}"
+                else:
+                    botResponse = (
+                        f"Here's the summary of {title} that I remembered from BART:"
+                    )
+                    botResponse2 = f"{summary}"    
+                # bot response
+                dispatcher.utter_message(text=botResponse)
+                dispatcher.utter_message(text=botResponse2)     
             else:
-                botResponse = (
-                    f"Here's the summary of {title} that I remembered from BART:"
-                )
-                botResponse2 = f"{summary}"
-
-        except requests.ConnectionError as exception:
-            botResponse = f"Please give a valid link."
-            botResponse2 = f"..."
-
-        # bot response
-        dispatcher.utter_message(text=botResponse)
-        dispatcher.utter_message(text=botResponse2)
+                botResponse = "🤔 Which paper are you reading? Please add the paper for me to summarize"
+                dispatcher.utter_message(text=botResponse)
+        except FileNotFoundError:
+            print("The file does not exist")
 
         return []

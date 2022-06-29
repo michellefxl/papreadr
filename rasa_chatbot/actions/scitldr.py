@@ -60,38 +60,39 @@ class Scitldr(Action):
             )
             data = json.load(f_in)
             # take latest document url
-            doc_folder = data["paper_log"][-1]["folder"]
+            if len(data["paper_log"]) > 0:
+                doc_folder = data["paper_log"][-1]["folder"]
+                doc_details = os.path.join(doc_folder, "details.log")
+
+                # check if summary exists
+                ab_bool = False
+                data_sum = []
+                try:
+                    f_in = open(
+                        doc_details,
+                    )
+                    try:
+                        data_sum = json.load(f_in)
+                        abstract = data_sum["abstract"]
+                        if abstract != "null":
+                            ab_bool = True
+                    except:
+                        print("No abstract")
+                except FileNotFoundError:
+                    print("The file does not exist")
+
+                if ab_bool:
+                    # get scitldr
+                    scitldr = getScitldr(abstract)
+
+                    botResponse = f"{scitldr}"
+                else:
+                    botResponse = f"Beep beep, please check if there's an available abstract for the paper in my folder"
+            else:
+                botResponse = "🤔 I have not read any papers with you. Please add a paper"        
+            # bot response
+            dispatcher.utter_message(text=botResponse)
         except FileNotFoundError:
             print("The file does not exist")
-
-        doc_details = os.path.join(doc_folder, "details.log")
-
-        # check if summary exists
-        ab_bool = False
-        data_sum = []
-        try:
-            f_in = open(
-                doc_details,
-            )
-            try:
-                data_sum = json.load(f_in)
-                abstract = data_sum["abstract"]
-                if abstract != "null":
-                    ab_bool = True
-            except:
-                print("No abstract")
-        except FileNotFoundError:
-            print("The file does not exist")
-
-        if ab_bool:
-            # get scitldr
-            scitldr = getScitldr(abstract)
-
-            botResponse = f"{scitldr}"
-        else:
-            botResponse = f"Beep beep, please check if there's an available abstract for the paper in my folder"
-
-        # bot response
-        dispatcher.utter_message(text=botResponse)
 
         return []
