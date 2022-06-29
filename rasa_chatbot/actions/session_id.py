@@ -42,22 +42,13 @@ class SessionId(Action):
             print("The file does not exist")
 
         no_user = True
-
         if len(data["user_ids"]) > 0:
             for data_line in data["user_ids"]:
                 if data_line["id"] == session_id:
                     no_user = False
 
-            if no_user:
-                user_folder = os.path.join(LOG_FOLDER + "/users", session_id)
-                shutil.copytree(USER_TEMPLATE_FOLDER, user_folder)
-                user_dict = {
-                    "id": session_id,
-                    "folder": user_folder,
-                    "added_date": added_time,
-                }
-                write_json(user_dict, USER_LOG, jsonkey="user_ids")
-        else:
+        # create new user folder 
+        if no_user:
             user_folder = os.path.join(LOG_FOLDER + "/users", session_id)
             shutil.copytree(USER_TEMPLATE_FOLDER, user_folder)
             user_dict = {
