@@ -19,7 +19,7 @@ python download_models.py
 ### Versions:
 22.April 2022 - V1 [Demo paper submitted to CUI 2022](https://github.com/michellefxl/paprreadrbot/files/8554340/Papr_Readr_Bot__CUI_2022_Demo_Track_.pdf)
 <p align="center">
-<img src="https://user-images.githubusercontent.com/100949943/165084052-214ae06c-66c0-438d-aa18-71c21b562688.png" width="auto" height="500" alt="web_ui"/>
+<img src="https://user-images.githubusercontent.com/100949943/165084052-214ae06c-66c0-438d-aa18-71c21b562688.png" width="auto" height="auto" alt="web_ui"/>
 </p>
 <p align="center"><em>Figure: Web application V1</em></p>
 9.June 2022 - V2 Updated UI
