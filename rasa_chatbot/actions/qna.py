@@ -77,6 +77,7 @@ class AnswerQuestion(Action):
                 with open(doc_text, "r") as file:
                     # First we load existing data into a dict.
                     cleaned_txt = json.load(file)["text"]
+                    file.close()
                 # TODO: add more features
                 # get answer from elsewhere
                 # extract section

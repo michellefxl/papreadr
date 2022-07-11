@@ -115,5 +115,17 @@ class ShowPaperLog(Action):
             message = {"payload": "quickReplies", "data": response_data}
             dispatcher.utter_message(text="Here are the links to the papers:", json_message=message)
 
+            # # Telegram
+            # colmsg = ""
+            # colmsg = colmsg + f"\nField: {str_fld}"
+            # colmsg = colmsg + f"\nYear: {str_yr}"
+            # colmsg = colmsg + f"\nPublisher: {str_pub}"
+
+            # dispatcher.utter_message(text=colmsg)
+
+            # print(response_data)
+            # # selectable options
+            # message = {"payload": "", "data": response_data}
+            # dispatcher.utter_button_message(text="Here are the links to the papers:", buttons=response_data, button_type="vertical")
 
         return []

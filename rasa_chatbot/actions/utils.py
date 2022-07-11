@@ -205,6 +205,7 @@ def preprocess_txt(paper_dict):
             with open(paper_text, "r") as file:
                 # First we load existing data into a dict.
                 read_data = json.load(file)
+                file.close()
             try:
                 cleaned_txt = read_data["text"]
                 doc_sections = read_data["chapters"]
@@ -448,6 +449,7 @@ def write_json(new_data, filename, jsonkey="url_history"):
         file.seek(0)
         # convert back to json
         json.dump(file_data, file, indent=4)
+        file.close()
 
 
 def update_json(new_data, filename):
@@ -466,6 +468,7 @@ def update_json(new_data, filename):
         file.seek(0)
         # convert back to json
         json.dump(file_data, file, indent=4)
+        file.close()
 
 
 def get_read_time(text):

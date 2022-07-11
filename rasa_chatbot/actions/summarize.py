@@ -74,6 +74,7 @@ class SummarizeDoc(Action):
                 user_paper_log,
             )
             data = json.load(f_in)
+            f_in.close()
             # take latest document url
             if len(data["paper_log"]) > 0:
                 title = data["paper_log"][-1]["title"]
@@ -91,6 +92,7 @@ class SummarizeDoc(Action):
                         data_sum = json.load(f_in)
                         summary = data_sum["summary"]
                         read_bool = True
+                        f_in.close()
                     except:
                         print("No summary")
                 except FileNotFoundError:
@@ -102,6 +104,7 @@ class SummarizeDoc(Action):
                     with open(doc_text, "r") as file:
                         # First we load existing data into a dict.
                         cleaned_txt = json.load(file)["text"]
+                        file.close()
 
                     # decide on summary of doc or summary of section
                     summary = getSummary(cleaned_txt)

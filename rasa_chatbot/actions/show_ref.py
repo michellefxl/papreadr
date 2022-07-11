@@ -64,9 +64,12 @@ class ShowReferences(Action):
                     ref_cnt = len(paper_details['references'])
                     botResponse = f"This paper has {ref_cnt} references! 😀"
 
-                    # selectable options
+                    # selectable options web ui
                     message = {"payload": "quickReplies", "data": response_data}
                     dispatcher.utter_message(text=botResponse, json_message=message)
+
+                    # # Telegram
+                    # dispatcher.utter_message(text="Sorry I can't show you the links to the references 😔")
                 else:
                     dispatcher.utter_message(text=f"Sorry I can't retrieve the references 😔")
             else:

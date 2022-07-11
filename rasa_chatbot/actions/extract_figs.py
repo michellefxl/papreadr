@@ -91,6 +91,7 @@ class ExtractFigs(Action):
                 user_paper_log,
             )
             data = json.load(f_in)
+            f_in.close()
             if len(os.listdir(fig_folder)) > 0:
                 doc_url = data["paper_log"][-1]["url"]
                 doc_folder = data["paper_log"][-1]["folder"]
@@ -108,6 +109,9 @@ class ExtractFigs(Action):
                     for imgp in img_paths:
                         print(imgp)
                         dispatcher.utter_message(image=imgp)
+                    
+                    # # Telegram
+                    # dispatcher.utter_message(text="Sorry I can't show you the figures")
                 else:
                     botResponse = f"Oops, no figures extracted."
                     dispatcher.utter_message(text=botResponse)

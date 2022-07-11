@@ -51,11 +51,12 @@ class GetNotes(Action):
                     )
                     note_data = json.load(note_f)
                     doc_notes = note_data["doc_notes"]
+                    note_f.close()
 
                     notes_str = ""
                     if len(doc_notes) > 0:
                         for n in doc_notes:
-                            notes_str = notes_str + "\n - " + n
+                            notes_str = notes_str + "\n" + n
 
                         botResponse = f"{notes_str}"
                     else:

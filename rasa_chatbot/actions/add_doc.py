@@ -91,6 +91,7 @@ class SetDoc(Action):
                     user_paper_log,
                 )
                 data_user = json.load(f_in)
+                f_in.close()
             except FileNotFoundError:
                 print("The file does not exist")
 
@@ -106,6 +107,7 @@ class SetDoc(Action):
                     URL_LOG,
                 )
                 data = json.load(f_in)
+                f_in.close()
             except FileNotFoundError:
                 print("The file does not exist")
 

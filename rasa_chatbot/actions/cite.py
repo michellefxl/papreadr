@@ -42,12 +42,14 @@ class GetCitation(Action):
                 user_paper_log,
             )
             data = json.load(f_in)
+            f_in.close()
             if len(data["paper_log"]) > 0:
                 doc_folder = data["paper_log"][-1]["folder"]
                 doc_details = os.path.join(doc_folder, "details.log")
                 with open(doc_details, "r") as file:
                     # First we load existing data into a dict.
                     bibtex = json.load(file)["bib"]
+                    file.close()
                 botResponse = bibtex
             else:
                 botResponse = "🤔 I have not read any papers with you. Please add the paper you want to cite"

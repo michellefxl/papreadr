@@ -42,7 +42,6 @@ class GetHelp(Action):
         dispatcher.utter_message(text=botResponse, json_message=message)
 
         # Telegram help
-        # botResponse = "- add doc \n- read log \n- scitldr \n- summarize \n- paper references \n- answer questions \n- get figures \n- get keywords \n- get citation \n- take notes \n- show notes"
-        # dispatcher.utter_message(text=botResponse)
+        # dispatcher.utter_button_message(text=botResponse, buttons=data, button_type="vertical")
 
         return []
