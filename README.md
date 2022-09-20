@@ -4,6 +4,8 @@
 ### Hi, I am Papr Readr Bot!
 Reading research papers can be a tedious and lonely task. We present Papr Readr Bot, a (chat)bot which aims to assist researchers in reading papers more effectively and with less cognitive effort by providing paper summaries, answering questions about the paper, extracting figures from the paper, taking notes, and generate citation. Papr Readr Bot demonstrates and provides hands-on experiences of various deep learning-based skills that can be integrated in useful and social conversational assistants for reading related contexts.
 
+### Paper
+[ACM link](https://dl.acm.org/doi/10.1145/3543829.3544536)
 
 ### Setup
 1. Install packages in conda env (environment.yml, requirements.txt)
@@ -14,7 +16,6 @@ Reading research papers can be a tedious and lonely task. We present Papr Readr 
 ```
 python download_models.py
 ```
-
 
 ### Versions:
 22.April 2022 - V1 [Demo paper submitted to CUI 2022](https://github.com/michellefxl/paprreadrbot/files/8554340/Papr_Readr_Bot__CUI_2022_Demo_Track_.pdf)
@@ -140,3 +141,23 @@ example in credentials.yml: webhook_url: "https://NGROK_URL.io/webhooks/telegram
 <img src="https://user-images.githubusercontent.com/100949943/165086750-9518a167-b719-49a5-8a10-98b219a529f9.png" width="auto" height="600" />
 </p>
 <p align="left"><em>Figure: Telegram chatbot @papreadr_bot</em></p>
+
+### Bibtex
+```
+@inproceedings{10.1145/3543829.3544536,
+author = {Foo, Michelle Xiao-Lin and Della Libera, Luca and Aslan, Ilhan},
+title = {Papr Readr Bot: A Conversational Agent to Read Research Papers},
+year = {2022},
+isbn = {9781450397391},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3543829.3544536},
+doi = {10.1145/3543829.3544536},
+booktitle = {Proceedings of the 4th Conference on Conversational User Interfaces},
+articleno = {39},
+numpages = {4},
+keywords = {conversational agents, question answering, keyword extraction, summarization, natural language understanding},
+location = {Glasgow, United Kingdom},
+series = {CUI '22}
+}
+```
