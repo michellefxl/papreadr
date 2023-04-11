@@ -159,7 +159,7 @@ questionary==1.10.0
 randomname==0.1.5
 rasa==3.0.9
 rasa-sdk==3.0.6
-redis==3.5.3
+redis==4.4.4
 refextract==1.1.4
 regex==2021.8.28
 requests==2.27.1
